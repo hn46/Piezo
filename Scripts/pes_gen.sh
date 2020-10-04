@@ -1,6 +1,6 @@
 #!/bin/bash
 
-NPP=-1
+NPP=4
 
 PREFIX="Mo"
 D_PREF="Mo"
@@ -54,9 +54,9 @@ fi
 touch $PWD/$D_PREF/$PREFIX.xyz
 cat > $PWD/$D_PREF/$PREFIX.xyz << EOF
 EOF
-touch $PWD/$D_PREF/${PREFIX}.script
-cat > $PWD/$D_PREF/${PREFIX}.script << EOF
-#!/bin/sh
+touch $PWD/$D_PREF/${PREFIX}.sh
+cat > $PWD/$D_PREF/${PREFIX}.sh << EOF
+#!/bin/bash
 F_PREFIX=${PREFIX}
 D_IN="$D_INN"
 D_OUT="$D_INN/OUT"
@@ -136,14 +136,14 @@ $ATOM_POS
 
 EOF
         if [ $NPP == -1 ];then
-        cat >> $PWD/$D_PREF/${PREFIX}.script << EOF
+        cat >> $PWD/$D_PREF/${PREFIX}.sh << EOF
 date
 \$D_QE/pw.x -i \$D_IN/${PREFIX}_${A_VAL}_${B_VAL}.scf.in > \$D_OUT/${PREFIX}_${A_VAL}_${B_VAL}.scf.out;
 echo "${PREFIX}_${A_VAL}_${B_VAL}";
 echo -n "\$(grep ! "\$D_OUT/${PREFIX}_${A_VAL}_${B_VAL}.scf.out" | awk {'print \$5'}) " >> \$D_OUT/${PREFIX}_plot.dat
 EOF
         else
-        cat >> $PWD/$D_PREF/${PREFIX}.script << EOF
+        cat >> $PWD/$D_PREF/${PREFIX}.sh << EOF
 date
 mpirun -np \$NP \$D_QE/pw.x -i \$D_IN/${PREFIX}_${A_VAL}_${B_VAL}.scf.in > \$D_OUT/${PREFIX}_${A_VAL}_${B_VAL}.scf.out;
 echo "${PREFIX}_${A_VAL}_${B_VAL}";
@@ -155,7 +155,7 @@ EOF
         Y_2=$Y_2_INIT
         X_1=$(echo "scale=$SCALE; $X_1+$STEP" | bc)
         X_2=$(echo "scale=$SCALE; $X_2+$STEP" | bc)
-        cat >> $PWD/$D_PREF/${PREFIX}.script << EOF
+        cat >> $PWD/$D_PREF/${PREFIX}.sh << EOF
 echo -e "\n" >> \$D_OUT/${PREFIX}_plot.dat
 EOF
 
